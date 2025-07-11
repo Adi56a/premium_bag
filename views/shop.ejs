@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Page</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(135deg, #2f4f94, #8a94e0); /* Dark blue gradient */
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 25%;
+            background-color: #1c1e3e; /* Dark blue background */
+            color: white;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 3px solid #f2b93d; /* Elegant gold accent */
+        }
+
+        .sidebar h2 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #f2b93d; /* Gold color */
+        }
+
+        .sidebar .filter-section,
+        .sidebar .sort-section {
+            margin-top: 20px;
+        }
+
+        .sidebar label {
+            font-size: 16px;
+            display: block;
+            margin: 12px 0;
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        .sidebar input[type="checkbox"],
+        .sidebar select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #333;
+            color: #ddd;
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            font-size: 36px;
+            color: #f2b93d;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            width: 75%;
+            padding: 50px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            box-sizing: border-box;
+            overflow-y: scroll;
+            height: 100vh;
+            margin-left: 25%; /* Ensures content is not hidden behind the sidebar */
+        }
+
+        .product-card {
+            width: 22%;
+            background-color: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 40px;
+            padding: 20px;
+            cursor: pointer;
+            max-height: 400px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-card .product-info {
+            padding: 20px;
+        }
+
+        .product-card h3 {
+            font-size: 22px;
+            color: #333;
+            margin: 15px 0;
+            font-weight: 700;
+        }
+
+        .product-card p {
+            color: #777;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .product-card .discount {
+            font-size: 16px;
+            color: #f2b93d; /* Gold accent */
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .product-card img {
+            animation: bounce 0.7s ease-in-out;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .product-card {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-card {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Filters & Sorting</h2>
+        <div class="filter-section">
+            <label>
+                <input type="checkbox"> Free Shipping
+            </label>
+            <label>
+                <input type="checkbox"> In Stock
+            </label>
+            <label>
+                <input type="checkbox"> On Sale
+            </label>
+        </div>
+
+        <div class="sort-section">
+            <label for="sort">Sort by:</label>
+            <select id="sort">
+                <option value="price-low-high">Price: Low to High</option>
+                <option value="price-high-low">Price: High to Low</option>
+                <option value="newest">Newest</option>
+                <option value="rating">Rating</option>
+            </select>
+        </div>
+
+        <!-- Cart Icon -->
+        <div class="cart-icon">
+            <i class="fas fa-shopping-cart"></i> <!-- Ensure FontAwesome is loaded correctly -->
+        </div>
+    </div>
+
+    <!-- Main Shop Content -->
+    <div class="main-content">
+        <% Products.forEach(function(product){ %>
+            <div class="product-card">
+                <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>">
+                <div class="product-info">
+                    <h3><%= product.name %></h3>
+                    <p>$<%= product.price %></p>
+                    <% if (product.discount > 0) { %>
+                        <p class="discount">Discount: <%= product.discount %>% OFF</p>
+                    <% } %>
+                    <!-- Add to Cart Button with a Tag -->
+                    <a href="/cart/<%= product.id %>" class="add-to-cart-btn">Add to Cart</a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Include FontAwesome for the Cart Icon -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

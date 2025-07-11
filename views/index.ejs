@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration and Login Forms</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .form-container {
+            width: 48%;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .form-toggle {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .form-toggle a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .form-toggle a:hover {
+            text-decoration: underline;
+        }
+        .toggle-text {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Flash message styles */
+        .flash {
+            width: 100%;
+            padding: 15px;
+            margin: 0;
+            color: #e31111;
+            font-size: 1.2rem;
+            background-color: #ffffff; /* Red color for error */
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-out, visibility 0s 0.5s;
+        }
+        .flash.show {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease-out, visibility 0s 0s;
+        }
+
+        .flash.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Positioning the flash message at the top */
+        .flash-container {
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+        #success_flash{
+            color: green;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Flash message container -->
+<% if (error_msg.length >= 1) { %>
+    <div class="flash-container">
+        <div class="flash show" id="flashMessage"><%= error_msg %></div>
+    </div>
+<% } %>
+<% if (success_msg.length >= 1) { %>
+    <div class="flash-container">
+        <div class="flash show" id="success_flash"><%= success_msg %></div>
+    </div>
+<% } %>
+
+<div class="container">
+    <!-- Registration Form -->
+    <div class="form-container" id="registration-form">
+        <h2>Registration</h2>
+        <form action="/users/register" method="POST">
+            <input type="text" name="fullname" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Create User</button>
+        </form>
+        <div class="form-toggle">
+            <p class="toggle-text">Already have an account? <a href="#login-form">Login here</a></p>
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" id="login-form">
+        <h2>Login</h2>
+        <form action="/users/login" method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="form-toggle">
+            <p class="toggle-text">Don't have an account? <a href="#registration-form">Register here</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for hiding flash message after 5 seconds -->
+<% if (error_msg) { %>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            setTimeout(() => {
+                const flashMessage = document.getElementById('flashMessage');
+                flashMessage.classList.remove('show');
+                flashMessage.classList.add('hide');
+            }, 5000); // Wait for 5 seconds before hiding the message
+        });
+    </script>
+<% } %>
+
+</body>
+</html>
